@@ -1399,6 +1399,74 @@ public class Solution {
 }
 ```
 
+```java
+class Solution {
+    public int myAtoi(String str) {
+        long rev = 0;
+        char[] charList = str.toCharArray();
+        int length = str.length();
+        int zf = 1;
+        int i = 0;
+        int pop = 0;
+        for(;  i < length; i++){
+            if(charList[i] == ' '){
+                continue;
+            }else{
+                if(charList[i] == '-'){
+                    i++;
+                    zf = -1;
+                    break;
+                }
+                if(charList[i] == '+'){
+                    i++;
+                    break;
+                }
+                if(charList[i] <'0' || charList[i] >'9'){
+                    return 0;
+                }else{
+                    break;
+                }
+            }
+        }
+        if(i == length){
+            return 0;
+        }
+      
+        for(;i < length; i++){
+            if(charList[i] <'0' || charList[i] >'9'){
+                rev = rev * zf;
+                if(zf==-1 && rev<Integer.MIN_VALUE){
+                    return Integer.MIN_VALUE;
+                }
+                if(zf==1 && rev > Integer.MAX_VALUE){
+                    return Integer.MAX_VALUE;
+                }
+                return (int)rev;
+            }
+       
+            rev = rev * 10 + (long)(charList[i] - '0') ;
+            if(zf==-1 && rev<Integer.MIN_VALUE){
+            return Integer.MIN_VALUE;
+        }
+        if(zf==1 && rev > Integer.MAX_VALUE){
+            return Integer.MAX_VALUE;
+        }
+        }
+        rev = rev*zf;
+        System.out.println("rev:"+rev);
+        if(zf==-1 && rev<Integer.MIN_VALUE){
+            return Integer.MIN_VALUE;
+        }
+        if(zf==1 && rev > Integer.MAX_VALUE){
+            return Integer.MAX_VALUE;
+        }
+        return (int)rev;
+    }
+}
+```
+
+
+
 ## 数组中重复的数字
 
 > 在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。请找出数组中任意一个重复的数字。 例如，如果输入长度为7的数组{2,3,1,0,2,5,3}，那么对应的输出是第一个重复的数字2。
