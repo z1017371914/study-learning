@@ -98,20 +98,21 @@ public class TulingCondition implements Condition{
 * 创建 和 初始化 
 
   * Aware接口相关
-  * BeanPostProcessor.postProcessBeforeInitialization
-  * InitializingBean接口 afterPropertiesSet()方法
-  * 指定的init方法
+  * BeanPostProcessor.postProcessBeforeInitialization 
   * JSR250 @PostConstruct
-
-  * BeanPostProcessor.postProcessAfterInitialization
-
+  * InitializingBean接口 afterPropertiesSet()方法
+  * 指定的init方法 
+* BeanPostProcessor.postProcessAfterInitialization
+  
 * 销毁  ( 如果是prototype 模式，那么不受spring容器管理）
 
-  (1)实现 disposableBean接口
+  (1) JSR250 @ProDestory
 
-  (2)指定的desotry方法
+  (2)实现 DisposableBean接口 的destory方法
 
-  (3) JSR250 @ProDestory
+  (3)指定的desotry方法
+  
+  
 
 ## Bean 和 BeanDefinition的区别
 
