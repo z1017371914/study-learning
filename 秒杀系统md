@@ -1,0 +1,29 @@
+# 秒杀系统
+
+[toc]
+
+
+
+## 基础系统
+
+> 主要用 乐观锁  update数据库的时候，库存>0
+
+## 转成分布式
+
+> 主要解决分布式session问题
+
+## Redis缓存模式
+
+* @PostContruct 加载库存缓存
+* redis.decr 原子操作 redis.incr 
+
+### QPS & TPS
+
+![](https://tva1.sinaimg.cn/large/00831rSTly1gcsfdlgdgqj30j60crq68.jpg)
+
+
+
+![](https://tva1.sinaimg.cn/large/00831rSTly1gcshvhn85yj30pa0eu430.jpg)
+
+## JVM级别缓存
+
