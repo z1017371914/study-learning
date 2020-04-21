@@ -10,9 +10,20 @@
 
 ###  查询缓存（5.8被取消，因为缓存失效太容易）
 
-### 分析器
+### 分析器  后面还有个预处理器
 
 ### 优化器
+
+多个执行计划，选个最优的
+
+```
+set optimizer_trace='enabled=on';
+select * from information_schema.optimizer_trace\G
+```
+
+
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gdvxwx4qxhj30mn05rwfz.jpg)
 
 ### 执行器
 
@@ -21,6 +32,10 @@
 ### MyISAM
 
 > 表锁效率低，所以只读的时候使用
+>
+> 插入 查询效率高
+>
+> 往数据库中插入100w行，先创建myisam表，插入然后改成innodb
 
 ### InnoDB
 
@@ -36,11 +51,15 @@
 
 ### Archive
 
-> 归档，不支持修改
+> 归档，不支持修改 不支持索引
 
 
 
 ## 一条更新语句是如何执行的？
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gdw16lp80pj309r03wt9v.jpg)
+
+
 
 ![](https://tva1.sinaimg.cn/large/0082zybply1gbx72trp1hj30tl0m2wrm.jpg)
 
@@ -86,7 +105,7 @@
 >
 > 只适合在内存，不适合在磁盘
 
-### 索引类型和索引方法
+
 
 
 
@@ -100,9 +119,19 @@
 >
 > 后台很多线程 把buffer pool写入到磁盘，这个动作叫 <b>刷脏</b>
 
-### binlog
+### binlog redolog undolog
 
-> 记录DDL DML逻辑的日志 主从 数据恢复
+> binlog在服务层面 所有存储引擎共用
+>
+> redolog undolog 只在innodb中使用
+
+
+
+>  记录DDL DML逻辑的日志 
+>
+> 1.主从
+>
+>  2.数据恢复
 
 ## WAL （write aheading logging）防止数据库宕机
 
@@ -155,3 +184,24 @@ select * from fulltext_test where match(content) against('咕泡学院' IN NATUR
   * UUID 36个字符  16进制的数字，缺点 长度太长，无序
   * Redis 生成
   * 雪花算法 41 时间 10 机器id 12 序号
+
+## mysql 默认最大连接数 151   最大是16384
+
+## 索引的类型和索引的存储类型
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gdxxfcmhaoj305y04s3z3.jpg)
+
+SPATIAL 是空间索引
+
+Fulltext 全文索引
+
+```sql
+select * from fulltext_test where match(content) against('咕泡学院' IN NATURAL LANGUAGE MODE);
+```
+
+
+
+**存储类型** 是 hash 和BTREE
+
+
+
