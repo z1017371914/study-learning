@@ -31,11 +31,15 @@ select * from information_schema.optimizer_trace\G
 
 ### MyISAM
 
-> 表锁效率低，所以只读的时候使用
+> 表锁效率低，所以只读的时候使用，没有行锁
 >
 > 插入 查询效率高
 >
 > 往数据库中插入100w行，先创建myisam表，插入然后改成innodb
+>
+> 不支持事务
+>
+> 索引全是非聚簇索引
 
 ### InnoDB
 
@@ -202,6 +206,49 @@ select * from fulltext_test where match(content) against('咕泡学院' IN NATUR
 
 
 **存储类型** 是 hash 和BTREE
+
+
+
+## 没有主键 会找唯一索引建聚簇索引，如果没有唯一索引，那么就会见个rowid
+
+
+
+## 执行计划
+
+关注 type, keys,rows,extra.
+
+如果type是all 百分百要优化。
+
+Extra using temporary using filesort 结合具体sql优化。
+
+
+
+* type
+  * System  const的特例，只有一条
+  * Const mysql 能对查询的某部分进行优化并将其转化成一个常量
+  * eq_ref   使用的唯一索引 返回的  join on id
+  * ref:        不是唯一索引
+  * Range: select * from actor where id>1;
+  * index : 全索引扫描
+  * all: 全表扫描
+* ref
+  * 使用索引字段的结果集:const id 
+* extra
+  * Using index:  使用覆盖索引
+  * using index condition
+  * using where:  
+  * using temporary：select name from film; 把name加索引。
+  * using filesort: 
+
+​          
+
+## 一些查询配置信息的语句
+
+* show engiens;                                                 查询支持的引擎
+* show variables like '%storage_engine%';    查询默认引擎
+* show create table test;                                   查询表的存储结构
+
+
 
 
 

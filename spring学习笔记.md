@@ -128,8 +128,7 @@ public class TulingCondition implements Condition{
   * JSR250 @PostConstruct
   * InitializingBean接口 afterPropertiesSet()方法
   * 指定的init方法         
-  
-* BeanPostProcessor.postProcessAfterInitialization
+  * BeanPostProcessor.postProcessAfterInitialization
   
 * 销毁  ( 如果是prototype 模式，那么不受spring容器管理）
 
