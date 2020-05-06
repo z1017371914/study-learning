@@ -24,7 +24,13 @@
 
 ### 加载
 
+## 类卸载
 
+> 一个class要被回收准确的说应该是卸载，必须同时满足以下三个条件
+>
+> - - 堆中不存在该类的任何实例
+>   - 加载该类的classloader已经被回收
+>   - 该类的java.lang.Class对象没有在任何地方被引用，也就是说无法通过反射再带访问该类的信息
 
 
 
@@ -77,6 +83,8 @@
 
 （4）本地方法栈JNI的引用对象
 ```
+
+
 
 ### parallel scavenge 与parnew 区别
 
@@ -267,6 +275,8 @@ jmap -dmup:format=b,file=heap.hprof PID
 
 
 #### G1调优方法
+
+* -XX:+HeapDumpOnOutOfMemoryError  oom的时候会自动dump文件
 
 * 调大堆内存
   * 优点：gc次数变少

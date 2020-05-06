@@ -4,9 +4,13 @@
 
 # 博客资源
 
-[子路博客](https://blog.csdn.net/java_lyvee/article/details/102499560)
+### [子路博客](https://blog.csdn.net/java_lyvee/article/details/102499560)
 
-[鲁班学院](https://gitee.com/archguide/dashboard/projects)
+### [鲁班学院](https://gitee.com/archguide/dashboard/projects)
+
+### [循环依赖和三级缓存](https://blog.csdn.net/f641385712/article/details/92801300)
+
+### [AOP](https://shimo.im/docs/Nj0bcFUy3SYyYnbI/)
 
 
 
@@ -63,6 +67,8 @@ public class TulingCondition implements Condition{
 
 * @CompentScan + @Controller + @Service + @ Compent @ Repository
 
+* ac.getBeanFactory().registerSingleton()
+
 * @Import
 
   ```java
@@ -116,6 +122,8 @@ public class TulingCondition implements Condition{
 版本二
 
 * 创建 之前
+
+  * BeanDefinitionRegistryPostProcessor 这个在扫描之前可以向容器中添加beanDefinition
 
   * 初始化容器
   * 加载BeanFactoryPostProcessor实现类 (BeanDefinitionRegistryPostProcessor子接口，调用在这个之前)
@@ -187,20 +195,23 @@ public class TulingCondition implements Condition{
 
 ## 注入模型 （不是注入的方式）
 
-注入模型：找bean 注入bean,
+注入模型：找bean 注入bean,   
 
 仅仅针对 xml方式，很多property 比较麻烦，然后自动注入就可以了。
 
 **注意啦！！！**  可以通过修改beandefinition来进行修改。实现set方法
 
 * no
+
 * bytype  setName      :bytype冲突的话 ，不注入，是null  ,primary和autowired-candidate
+
+  ![](https://tva1.sinaimg.cn/large/007S8ZIlly1geb1axerbtj30dg07eq5y.jpg)
+
 * byname
+
 * constuctor-----推断构造方法
 
-## Spring注入方式有几种
-
-小tip: 如果有多个构造函数，选择参数都有且最多的那个
+**小tip: 如果有多个构造函数，选择参数都有且最多的那个**
 
 > 官网说有两种： construct，和set方法
 >
@@ -231,7 +242,11 @@ AutowireMode(自动装配模型):在spring中有四种模式分别是: 
 原文链接：https://blog.csdn.net/qq_27409289/article/details/100753656
 ```
 
+## Spring注入方式有几种
 
+constructor
+
+set方法
 
 ## resource 和AutoWired的不同点
 
@@ -239,7 +254,7 @@ AutowireMode(自动装配模型):在spring中有四种模式分别是: 
 
 一个Spring提供的，一个jdk提供，
 
-一个先type后name，一个先name后type
+一个先type后name，一个先name后type  不叫 byname 和bytype
 
 解析的后置处理器不同
 
@@ -247,9 +262,29 @@ AutowireMode(自动装配模型):在spring中有四种模式分别是: 
 
 @Resource     CommonAnnotationBeanPostProcessor
 
+
+
+## 完成依赖注入的关键后置处理器
+
+* 如果@autowired 用的是下面的处理器
+
+  InstantiationAwareBeanPostProcessor
+
+  **AutowiredAnnotationBeanPostProcessor** 
+
+
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1geb2oaepq0j30qq0b9n7p.jpg)
+
+* 如果是byname bytype 走的并不是这段代码，而是下面这段
+
+  ![](https://tva1.sinaimg.cn/large/007S8ZIlly1geb2vnubxtj30zo0f5h0f.jpg)
+
 ##  SmartLifeCycle
 
+isAutoStartup() 不用调用start方法
 
+Eureka 借用的smartLifeCycle的知识
 
 ## BeanFactory 和bean
 
@@ -278,13 +313,17 @@ AutowireMode(自动装配模型):在spring中有四种模式分别是: 
 
 
 
-* rootbeandefinition  ---- 作为父bd出现---真是bd出现---不能作为子bd出现
+* rootbeandefinition  ---- 作为父bd出现---真实bd出现---不能作为子bd出现
+
+  设置父bd 会抛异常
 
 * 合并的beandefinition 必须用rootbeanbeandefinition 接收，不能用generic，所以 generic 不能替代root
 
+* Generic 可以作为子 也可以作为父
+
 * 子beandefinition 构造方法必须传父beandefinition的name
 
-  
+  > 我的理解，就是子 bd 必须和父bd合并，变成一个rootbd
 
 ## mybatis和spring整合的原理
 
@@ -357,6 +396,10 @@ public class Config{
 * BeanDefinitionRegistryPostProcessor
 * ImportBeanDefinitionRegistrar
 
+
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gefmos5hg4j30em0b3dld.jpg)
+
 ## Refresh（）方法执行的顺序
 
 
@@ -367,7 +410,7 @@ public class Config{
 
 ​       2.1 执行的是 并不是new 对象。 
 
-​              ClassConfigurationPostProcessor 执行的postprocessorbeanfactory 的作用主要是把@configuration的类的bd 的类换成一个代理类。防止 @Bean注解的单例bean多次实例化。
+​              **ClassConfigurationPostProcessor 执行的postprocessorbeanfactory 的作用主要是把@configuration的类的bd 的类换成一个代理类。防止 @Bean注解的单例bean多次实例化**。
 
 
 
@@ -390,9 +433,11 @@ public class Config{
 
 ![](https://tva1.sinaimg.cn/large/00831rSTly1gdnlypf7apj310i093adu.jpg)
 
-**！！！三级缓存 让 B里面的A 提前完成了动态代理 ！！！**
+**！！！三级缓存 让 B里面的A 提前完成了动态代理 ！！！ **
 
+第三个map是beanfactory,里面完成了AOP
 
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gegvgls6enj30sz07tgmv.jpg)
 
 ## BeanPostProccssor
 
@@ -402,3 +447,12 @@ public class Config{
 
 
 
+## 合成方法 合成属性 合成类 synthetic
+
+* 内部类的变量，会提供一个合成方法
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gehv48z51sj30qx0fstin.jpg)
+
+* 内部类如果是私有构造函数，会提供合成类 以 $1结尾
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gehv66iymcj30by04sabj.jpg)

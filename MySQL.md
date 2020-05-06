@@ -252,3 +252,23 @@ Extra using temporary using filesort 结合具体sql优化。
 
 
 
+## 隔离级别，传播行为，MVCC，[redo log和undo log](https://www.cnblogs.com/f-ck-need-u/p/9010872.html),[当前读和快照读](https://www.jianshu.com/p/27352449bcc0)
+
+
+
+**TransactionDefinition.PROPAGATION_REQUIRED**􏶐 􏳷􏱍􏲃􏱏􏰞􏰛􏴱􏴲
+ **TransactionDefinition.PROPAGATION_SUPPORTS**􏶐 􏳷􏱍􏲃􏱏􏰞􏰛􏴱􏴲TransactionDefinition.PROPAGATION_MANDATORY􏰒􏶚􏲧􏴕􏲺􏸼􏸸􏰴􏺪􏵗􏶐
+
+**TransactionDefinition.PROPAGATION_REQUIRES_NEW**􏶐 􏰖􏰗􏰂􏰃􏱬􏰴􏴱􏴲
+ **TransactionDefinition.PROPAGATION_NOT_SUPPORTED**􏶐TransactionDefinition.PROPAGATION_NEVER
+
+􏲈􏰢􏺪􏵗􏶐
+
+**TransactionDefinition.PROPAGATION_NESTED**􏶐 
+
+
+
+## [for update 行锁的情况](https://blog.csdn.net/hardplay123/article/details/88774240)
+
+>结论：如果for update没有命中索引会锁表
+>如果这条数据不存在，是不会锁表的

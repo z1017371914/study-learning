@@ -802,7 +802,7 @@ java -jar spring-boot-02-config-02-0.0.1-SNAPSHOT.jar --server.port=8087  --serv
 
 
 
-### 1、**自动配置原理：**
+### 1、自动装配原理：
 
 1）、SpringBoot启动的时候加载主配置类，开启了自动配置功能 ==@EnableAutoConfiguration==
 
