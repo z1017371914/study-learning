@@ -456,3 +456,7 @@ public class Config{
 * 内部类如果是私有构造函数，会提供合成类 以 $1结尾
 
 ![](https://tva1.sinaimg.cn/large/007S8ZIlgy1gehv66iymcj30by04sabj.jpg)
+
+## 推断构造函数
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gele76jpzsj30o607idk2.jpg)
