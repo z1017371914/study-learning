@@ -221,26 +221,32 @@ select * from fulltext_test where match(content) against('咕泡学院' IN NATUR
 
 Extra using temporary using filesort 结合具体sql优化。
 
+```sql
+explain SELECT * FROM test.actor where id = 1;  --const
+explain SELECT * FROM test.actor where name = 'n1'; --ref
+explain SELECT name FROM test.actor   -- index
+```
+
 
 
 * type
   * System  const的特例，只有一条
   * Const mysql 能对查询的某部分进行优化并将其转化成一个常量
-  * eq_ref   使用的唯一索引 返回的  join on id
+  * eq_ref   使用的唯一索引 返回的  join on id，不用优化
   * ref:        不是唯一索引
-  * Range: select * from actor where id>1;   
+  * Range: select * from actor where id>1;    用索引查询范围
   * index : 全索引扫描
   * all: 全表扫描
 * ref
   * 使用索引字段的结果集:const id 
 * extra
-  * Using index:  使用覆盖索引
+  * Using index:  使用覆盖索引不会回表
   * using index condition
   * using where:  
-  * using temporary：select name from film; 把name加索引。
-  * using filesort: 
+  * using temporary：select distinct name from film; 把name加索引。
+  * using filesort: 同理加索引，select * from film order by name;
 
-*  Fi
+*  
 
 ## 一些查询配置信息的语句
 
@@ -262,3 +268,8 @@ Extra using temporary using filesort 结合具体sql优化。
 
 >结论：如果for update没有命中索引会锁表
 >如果这条数据不存在，是不会锁表的
+
+## 经典面试题
+
+1. 唯一索引和普通索引的区别
+2. 
