@@ -40,7 +40,7 @@
 
 > Javap -c Math.class  转化成可读的jvm字节码
 >
-> javap -v Math.class 会有常量池信息
+> javap -v Math.class  会有常量池信息
 
 
 
